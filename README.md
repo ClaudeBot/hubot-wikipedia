@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/ClaudeBot/hubot-wikipedia.svg)](https://travis-ci.org/ClaudeBot/hubot-wikipedia)
 [![devDependency Status](https://david-dm.org/ClaudeBot/hubot-wikipedia/dev-status.svg)](https://david-dm.org/ClaudeBot/hubot-wikipedia#info=devDependencies)
 
-A Hubot script for interacting with Wikipedia's API (searching for articles and returning extracts).
+A Hubot script for interacting with [Wikipedia's API](https://en.wikipedia.org/w/api.php) (searching for articles and returning extracts).
 
 See [`src/wikipedia.coffee`](src/wikipedia.coffee) for full documentation.
 

@@ -14,8 +14,11 @@
 # Author:
 #   MrSaints
 
+WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
+WIKI_EN_URL = "https://en.wikipedia.org/wiki"
+
 module.exports = (robot) ->
-    robot.respond /wiki search (.*)/i, (msg) ->
+    robot.respond /wiki search (.+)/i, (msg) ->
         params =
             action: 'opensearch'
             format: 'json'
@@ -30,7 +33,7 @@ module.exports = (robot) ->
             for article in object[1]
                 msg.send "#{article}: #{createURL(article)}"
 
-    robot.respond /wiki summary (.*)/i, (msg) ->
+    robot.respond /wiki summary (.+)/i, (msg) ->
         params =
             action: 'query'
             exintro: true
@@ -45,16 +48,20 @@ module.exports = (robot) ->
                     msg.reply "The article you have entered (\"#{msg.match[1]}\") does not exist. Try a different article."
                     return
 
-                summary = article.extract.split(". ")[0..1].join ". "
+                if article.extract is ""
+                    summary = "No summary available"
+                else
+                    summary = article.extract.split(". ")[0..1].join ". "
+
                 msg.send "#{article.title}: #{summary}."
                 msg.reply "Original article: #{createURL(article.title)}"
                 return
 
 createURL = (title) ->
-    "https://en.wikipedia.org/wiki/#{encodeURIComponent(title)}"
+    "#{WIKI_EN_URL}/#{encodeURIComponent(title)}"
 
 wikiRequest = (msg, params = {}, handler) ->
-    msg.http("http://en.wikipedia.org/w/api.php")
+    msg.http(WIKI_API_URL)
         .query(params)
         .get() (err, res, body) ->
             if err

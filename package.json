@@ -1,7 +1,7 @@
 {
   "name": "hubot-wikipedia",
   "description": "A Hubot script for interacting with Wikipedia's API (searching for articles and returning extracts).",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Ian Lai <os@fyianlai.com>",
   "license": "MIT",
   "keywords": [

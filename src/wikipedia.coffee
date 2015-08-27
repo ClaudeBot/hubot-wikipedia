@@ -18,7 +18,7 @@ WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
 WIKI_EN_URL = "https://en.wikipedia.org/wiki"
 
 module.exports = (robot) ->
-    robot.respond /wiki search (.+)/i, (msg) ->
+    robot.respond /wiki search (.+)/i, id: "wikipedia.search", (msg) ->
         params =
             action: 'opensearch'
             format: 'json'
@@ -33,7 +33,7 @@ module.exports = (robot) ->
             for article in object[1]
                 msg.send "#{article}: #{createURL(article)}"
 
-    robot.respond /wiki summary (.+)/i, (msg) ->
+    robot.respond /wiki summary (.+)/i, id: "wikipedia.summary", (msg) ->
         params =
             action: 'query'
             exintro: true

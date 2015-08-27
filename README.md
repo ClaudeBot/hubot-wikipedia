@@ -29,10 +29,10 @@ See [`src/wikipedia.coffee`](src/wikipedia.coffee) for full documentation.
 
 ## Commands
 
-Command | Description
---- | ---
-hubot wiki search `query` | Returns the first 5 Wikipedia articles matching the search `query`
-hubot wiki summary `article` | Returns a one-line description about `article`
+Command | Listener ID | Description
+--- | --- | ---
+hubot wiki search `query` | `wikipedia.search` | Returns the first 5 Wikipedia articles matching the search `query`
+hubot wiki summary `article` | `wikipedia.summary` | Returns a one-line description about `article`
 
 
 ## Sample Interaction

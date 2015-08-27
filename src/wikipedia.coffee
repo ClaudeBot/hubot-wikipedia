@@ -18,34 +18,34 @@ WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
 WIKI_EN_URL = "https://en.wikipedia.org/wiki"
 
 module.exports = (robot) ->
-    robot.respond /wiki search (.+)/i, id: "wikipedia.search", (msg) ->
+    robot.respond /wiki search (.+)/i, id: "wikipedia.search", (res) ->
         params =
             action: 'opensearch'
             format: 'json'
             limit: 5
-            search: msg.match[1]
+            search: res.match[1]
 
-        wikiRequest msg, params, (object) ->
+        wikiRequest res, params, (object) ->
             if object[1].length is 0
-                msg.reply "No articles were found using search query: \"#{msg.match[1]}\". Try a different query."
+                res.reply "No articles were found using search query: \"#{res.match[1]}\". Try a different query."
                 return
 
             for article in object[1]
-                msg.send "#{article}: #{createURL(article)}"
+                res.send "#{article}: #{createURL(article)}"
 
-    robot.respond /wiki summary (.+)/i, id: "wikipedia.summary", (msg) ->
+    robot.respond /wiki summary (.+)/i, id: "wikipedia.summary", (res) ->
         params =
             action: 'query'
             exintro: true
             explaintext: true
             format: 'json'
             prop: 'extracts'
-            titles: msg.match[1]
+            titles: res.match[1]
 
-        wikiRequest msg, params, (object) ->
+        wikiRequest res, params, (object) ->
             for id, article of object.query.pages
                 if id is -1
-                    msg.reply "The article you have entered (\"#{msg.match[1]}\") does not exist. Try a different article."
+                    res.reply "The article you have entered (\"#{res.match[1]}\") does not exist. Try a different article."
                     return
 
                 if article.extract is ""
@@ -53,19 +53,19 @@ module.exports = (robot) ->
                 else
                     summary = article.extract.split(". ")[0..1].join ". "
 
-                msg.send "#{article.title}: #{summary}."
-                msg.reply "Original article: #{createURL(article.title)}"
+                res.send "#{article.title}: #{summary}."
+                res.reply "Original article: #{createURL(article.title)}"
                 return
 
 createURL = (title) ->
     "#{WIKI_EN_URL}/#{encodeURIComponent(title)}"
 
-wikiRequest = (msg, params = {}, handler) ->
-    msg.http(WIKI_API_URL)
+wikiRequest = (res, params = {}, handler) ->
+    res.http(WIKI_API_URL)
         .query(params)
-        .get() (err, res, body) ->
+        .get() (err, httpRes, body) ->
             if err
-                msg.reply "An error occurred while attempting to process your request: #{err}"
+                res.reply "An error occurred while attempting to process your request: #{err}"
                 return robot.logger.error err
 
             handler JSON.parse(body)

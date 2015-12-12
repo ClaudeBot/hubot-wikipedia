@@ -39,6 +39,7 @@ module.exports = (robot) ->
             exintro: true
             explaintext: true
             format: 'json'
+            redirects: true
             prop: 'extracts'
             titles: res.match[1]
 

@@ -19,34 +19,36 @@ WIKI_EN_URL = "https://en.wikipedia.org/wiki"
 
 module.exports = (robot) ->
     robot.respond /wiki search (.+)/i, id: "wikipedia.search", (res) ->
+        search = res.match[1].trim()
         params =
-            action: 'opensearch'
-            format: 'json'
+            action: "opensearch"
+            format: "json"
             limit: 5
-            search: res.match[1]
+            search: search
 
         wikiRequest res, params, (object) ->
             if object[1].length is 0
-                res.reply "No articles were found using search query: \"#{res.match[1]}\". Try a different query."
+                res.reply "No articles were found using search query: \"#{search}\". Try a different query."
                 return
 
             for article in object[1]
                 res.send "#{article}: #{createURL(article)}"
 
     robot.respond /wiki summary (.+)/i, id: "wikipedia.summary", (res) ->
+        target = res.match[1].trim()
         params =
-            action: 'query'
+            action: "query"
             exintro: true
             explaintext: true
-            format: 'json'
+            format: "json"
             redirects: true
-            prop: 'extracts'
-            titles: res.match[1]
+            prop: "extracts"
+            titles: target
 
         wikiRequest res, params, (object) ->
             for id, article of object.query.pages
-                if id is -1
-                    res.reply "The article you have entered (\"#{res.match[1]}\") does not exist. Try a different article."
+                if id is "-1"
+                    res.reply "The article you have entered (\"#{target}\") does not exist. Try a different article."
                     return
 
                 if article.extract is ""
